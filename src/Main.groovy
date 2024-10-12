@@ -6,6 +6,8 @@ class FindInFiles {
 
   static void main(String [] args){
     String folderPath = args[0]
+    String searchString = args[1]
+    String replaceString = args[2]
 
     File folder = new File(folderPath)
     if(!folder.isDirectory()) {
@@ -28,6 +30,12 @@ class FindInFiles {
             output << input
             //save files to backup directory
           }
+        }
+
+        String content = file.text
+        if (content.contains(searchString)) {
+          String updatedContent = content.replaceAll(searchString, replaceString)
+          file.text = updatedContent
         }
     }
 
