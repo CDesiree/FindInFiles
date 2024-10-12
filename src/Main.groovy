@@ -22,7 +22,7 @@ class FindInFiles {
 
     List<Map> updateLogs = []
 
-    folder.eachFileMatch(FileType.FILES, ~/.*\.txt/) {File file
+    folder.eachFileRecurse(FileType.FILES) {File file
       ->
         File backupFile = new File("${backupDir}/${file.name}")
         file.withInputStream {input ->
