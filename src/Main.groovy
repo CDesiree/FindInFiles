@@ -1,3 +1,5 @@
+import groovy.io.FileType
+
 import java.text.SimpleDateFormat
 
 class FindInFiles {
@@ -15,6 +17,19 @@ class FindInFiles {
       if(!backupDir.exists()) {
         backupDir.mkdirs()
       }
+
+    List<Map> updateLogs = []
+
+    folder.eachFileMatch(FileType.FILES, ~/.*\.txt/) {File file
+      ->
+        File backupFile = new File("${backupDir}/${file.name}")
+        file.withInputStream {input ->
+          backupFile.withOutputStream {output->
+            output << input
+            //save files to backup directory
+          }
+        }
+    }
 
   }
 }
