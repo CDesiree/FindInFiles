@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 class FindInFiles {
 
   static void main(String [] args){
@@ -6,11 +8,14 @@ class FindInFiles {
     File folder = new File(folderPath)
     if(!folder.isDirectory()) {
       println("Invalid folder path: ${folderPath}")
-
-    }else{
-      println("Valid folder path thanks~")
       System.exit(1)
     }
+
+    File backupDir = new File("${folderPath}/backup_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}")
+      if(!backupDir.exists()) {
+        backupDir.mkdirs()
+      }
+
   }
 }
 
