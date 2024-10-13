@@ -28,21 +28,7 @@ class FindInFiles {
     }
 
     if (outputDir != null) {
-      File logFile = new File("${outputDir}/update_log_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}.txt")
-      if (!logFile.exists()) {
-        logFile.createNewFile()
-      }
-      logFile.withWriter {writer ->
-        writer.write(String.format("%-30s %-20s %-30s %30s%n", "File name", "Pattern Found", "Start time", "End time"))
-        writer.write(String.format("%-30s %-20s %-30s %30s%n", "-----------", "------------", "----------", "--------"))
-        updateLogs.each {log ->
-          writer.write(String.format("%-30s %-20s %-30s %30s%n",
-                  log.fileName,
-                  log.patternFound,
-                  log.startTime,
-                  log.endTime))
-        }
-      }
+      writeLogToFile(updateLogs, outputDir)
     }
 
     println("Process completed. ${updateLogs.size()} files updated.")
@@ -82,6 +68,24 @@ class FindInFiles {
             startTime: new Date().toString(),
             endTime: new Date().toString()
     ]
+  }
+
+  private static void writeLogToFile(List<Map> updateLogs, String outputDir) {
+    File logFile = new File("${outputDir}/update_log_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}.txt")
+    if (!logFile.exists()) {
+      logFile.createNewFile()
+    }
+    logFile.withWriter {writer ->
+      writer.write(String.format("%-30s %-20s %-30s %30s%n", "File name", "Pattern Found", "Start time", "End time"))
+      writer.write(String.format("%-30s %-20s %-30s %30s%n", "-----------", "------------", "----------", "--------"))
+      updateLogs.each {log ->
+        writer.write(String.format("%-30s %-20s %-30s %30s%n",
+                log.fileName,
+                log.patternFound,
+                log.startTime,
+                log.endTime))
+      }
+    }
   }
 }
 
