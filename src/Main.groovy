@@ -8,7 +8,7 @@ class FindInFiles {
     String folderPath = args[0]
     String searchString = args[1]
     String replaceString = args[2]
-    String outputDir = args.length > 3 ? args[3] : null
+    String outputDir = args.length > 3 ? args[3] : null //add ternary condition to make param optional
 
     File folder = new File(folderPath)
     validateDirectory(folder, folderPath)
@@ -52,6 +52,7 @@ class FindInFiles {
       backupDir.mkdirs()
     }
     return backupDir
+    //create backup directory
   }
 
   private static void validateDirectory(File folder, String folderPath) {
@@ -59,6 +60,7 @@ class FindInFiles {
       println("Invalid folder path: ${folderPath}")
       System.exit(1)
     }
+    //check if the input path is valid
   }
 
   private static Map createLogEntry(String fileName, String patterFound) {
@@ -68,13 +70,15 @@ class FindInFiles {
             startTime: new Date().toString(),
             endTime: new Date().toString()
     ]
+    //arrange log encoding
   }
 
   private static void writeLogToFile(List<Map> updateLogs, String outputDir) {
     File logFile = new File("${outputDir}/update_log_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}.txt")
     if (!logFile.exists()) {
       logFile.createNewFile()
-    }
+    }//was planning to save log as xlsx, however, had issues with apache poi dependency,
+    // so I opted to use txt file and formatting the log~
     logFile.withWriter {writer ->
       writer.write(String.format("%-30s %-20s %-30s %30s%n", "File name", "Pattern Found", "Start time", "End time"))
       writer.write(String.format("%-30s %-20s %-30s %30s%n", "-----------", "------------", "----------", "--------"))
@@ -87,5 +91,6 @@ class FindInFiles {
       }
     }
   }
+  //input contents to logger with format setter
 }
 
