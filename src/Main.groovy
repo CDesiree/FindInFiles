@@ -54,12 +54,14 @@ class FindInFiles {
         logFile.createNewFile()
       }
       logFile.withWriter {writer ->
-        writer.write("File Count: ${updateLogs.size()}\n")
+        writer.write(String.format("%-30s %-20s %-30s %30s%n", "File name", "Pattern Found", "Start time", "End time"))
+        writer.write(String.format("%-30s %-20s %-30s %30s%n", "-----------", "------------", "----------", "--------"))
         updateLogs.each {log ->
-          writer.write("File: ${log.fileName}, " +
-                  "Pattern: ${log.patternFound}, " +
-                  "Start Time: ${log.startTime}, " +
-                  "End Time: ${log.endTime}\n")
+          writer.write(String.format("%-30s %-20s %-30s %30s%n",
+                  log.fileName,
+                  log.patternFound,
+                  log.startTime,
+                  log.endTime))
         }
       }
     }
