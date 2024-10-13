@@ -22,16 +22,8 @@ class FindInFiles {
         backupFile(backupDir, file)
         String content = file.text
         if (content.contains(searchString)) {
-          String updatedContent = content.replaceAll(searchString, replaceString)
-          file.text = updatedContent
-
-          Map logEntry = [
-                  fileName: file.name,
-                  patternFound: searchString,
-                  startTime: new Date().toString(),
-                  endTime: new Date().toString()
-          ]
-          updateLogs.add(logEntry)
+          file.text = content.replaceAll(searchString, replaceString)
+          updateLogs << createLogEntry(file.name, searchString)
         }
     }
 
@@ -81,6 +73,15 @@ class FindInFiles {
       println("Invalid folder path: ${folderPath}")
       System.exit(1)
     }
+  }
+
+  private static Map createLogEntry(String fileName, String patterFound) {
+    return [
+            fileName: fileName,
+            patternFound: patterFound,
+            startTime: new Date().toString(),
+            endTime: new Date().toString()
+    ]
   }
 }
 
