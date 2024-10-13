@@ -11,10 +11,7 @@ class FindInFiles {
     String outputDir = args.length > 3 ? args[3] : null
 
     File folder = new File(folderPath)
-    if(!folder.isDirectory()) {
-      println("Invalid folder path: ${folderPath}")
-      System.exit(1)
-    }
+    validateDirectory(folder, folderPath)
 
     File backupDir = new File("${folderPath}/backup_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}")
       if(!backupDir.exists()) {
@@ -69,6 +66,13 @@ class FindInFiles {
     println("Process completed. ${updateLogs.size()} files updated.")
     println("Backup folder: ${backupDir}")
 
+  }
+
+  private static void validateDirectory(File folder, String folderPath) {
+    if (!folder.isDirectory()) {
+      println("Invalid folder path: ${folderPath}")
+      System.exit(1)
+    }
   }
 }
 
