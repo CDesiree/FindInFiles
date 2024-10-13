@@ -19,14 +19,7 @@ class FindInFiles {
 
     folder.eachFileRecurse(FileType.FILES) {File file
       ->
-        File backupFile = new File("${backupDir}/${file.name}")
-        file.withInputStream {input ->
-          backupFile.withOutputStream {output->
-            output << input
-            //save files to backup directory
-          }
-        }
-
+        backupFile(backupDir, file)
         String content = file.text
         if (content.contains(searchString)) {
           String updatedContent = content.replaceAll(searchString, replaceString)
@@ -63,6 +56,16 @@ class FindInFiles {
     println("Process completed. ${updateLogs.size()} files updated.")
     println("Backup folder: ${backupDir}")
 
+  }
+
+  private static void backupFile(File backupDir, File file) {
+    File backupFile = new File("${backupDir}/${file.name}")
+    file.withInputStream { input ->
+      backupFile.withOutputStream { output ->
+        output << input
+        //save files to backup directory
+      }
+    }
   }
 
   private static File createBackupDir(String folderPath) {
