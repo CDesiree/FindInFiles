@@ -13,10 +13,7 @@ class FindInFiles {
     File folder = new File(folderPath)
     validateDirectory(folder, folderPath)
 
-    File backupDir = new File("${folderPath}/backup_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}")
-      if(!backupDir.exists()) {
-        backupDir.mkdirs()
-      }
+    File backupDir = createBackupDir(folderPath)
 
     List<Map> updateLogs = []
 
@@ -66,6 +63,14 @@ class FindInFiles {
     println("Process completed. ${updateLogs.size()} files updated.")
     println("Backup folder: ${backupDir}")
 
+  }
+
+  private static File createBackupDir(String folderPath) {
+    File backupDir = new File("${folderPath}/backup_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}")
+    if (!backupDir.exists()) {
+      backupDir.mkdirs()
+    }
+    return backupDir
   }
 
   private static void validateDirectory(File folder, String folderPath) {
