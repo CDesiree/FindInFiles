@@ -8,6 +8,7 @@ class FindInFiles {
     String folderPath = args[0]
     String searchString = args[1]
     String replaceString = args[2]
+    String outputDir = args.length > 3 ? args[3] : null
 
     File folder = new File(folderPath)
     if(!folder.isDirectory()) {
@@ -36,8 +37,35 @@ class FindInFiles {
         if (content.contains(searchString)) {
           String updatedContent = content.replaceAll(searchString, replaceString)
           file.text = updatedContent
+
+          Map logEntry = [
+                  fileName: file.name,
+                  patternFound: searchString,
+                  startTime: new Date().toString(),
+                  endTime: new Date().toString()
+          ]
+          updateLogs.add(logEntry)
         }
     }
+
+    if (outputDir != null) {
+      File logFile = new File("${outputDir}/update_log_${new SimpleDateFormat('yyyyMMddHHmmss').format(new Date())}.txt")
+      if (!logFile.exists()) {
+        logFile.createNewFile()
+      }
+      logFile.withWriter {writer ->
+        writer.write("File Count: ${updateLogs.size()}\n")
+        updateLogs.each {log ->
+          writer.write("File: ${log.fileName}, " +
+                  "Pattern: ${log.patternFound}, " +
+                  "Start Time: ${log.startTime}, " +
+                  "End Time: ${log.endTime}\n")
+        }
+      }
+    }
+
+    println("Process completed. ${updateLogs.size()} files updated.")
+    println("Backup folder: ${backupDir}")
 
   }
 }
